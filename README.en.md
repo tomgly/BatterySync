@@ -1,4 +1,6 @@
 # BatterySync
+[![en](https://img.shields.io/badge/lang-ja-blue.svg)](https://github.com/tomgly/BatterySync/blob/main/README.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/tomgly/BatterySync/blob/main/README.en.md)
 
 BatterySync is an app that shares battery information between multiple devices and across different operating systems. With this app, you can easily monitor the battery status of various devices, enabling efficient battery management.
 

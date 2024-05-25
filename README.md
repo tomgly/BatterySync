@@ -1,6 +1,6 @@
 # BatterySync
-[![en](https://img.shields.io/badge/lang-ja-blue.svg)](https://github.com/tomgly/sample_list/blob/main/README.md)
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/tomgly/sample_list/blob/main/README.en.md)
+[![en](https://img.shields.io/badge/lang-ja-blue.svg)](https://github.com/tomgly/BatterySync/blob/main/README.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/tomgly/BatterySync/blob/main/README.en.md)
 
 BatterySyncは、複数のデバイス間や異なるOS間でバッテリー情報を共有するアプリです。このアプリを使用すると、異なるデバイスのバッテリー状況を一目で把握でき、効率的なバッテリーマネジメントが可能になります。
 
