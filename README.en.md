@@ -19,7 +19,7 @@ BatterySync is an app that shares battery information between multiple devices a
 
 ## Installation
 ### Prerequisites
-- iOS 14 or later / Android 8.0 or later
+- iOS 12 or later / Android 4.4 or later
 - Internet connection
 
 ### Steps
