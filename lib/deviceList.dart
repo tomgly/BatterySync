@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:battery_plus/battery_plus.dart';
 
@@ -10,12 +9,15 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  int batteryLevel = 0;
+  int _batteryLevel = 0;
+  //バッテリーの状態をStateとして保持
+  BatteryState? _batteryState;
+  //StreamSubscriptionで監視する
+  StreamSubscription<BatteryState>? _batteryStateSubscription;
 
   @override
   void initState() {
     super.initState();
-
     Timer.periodic(
       const Duration(seconds: 10),
       (Timer timer) {
@@ -24,10 +26,16 @@ class _ListPageState extends State<ListPage> {
         });
       }
     );
+    _batteryStateSubscription =
+        Battery().onBatteryStateChanged.listen((BatteryState state) {
+          setState(() {
+            _batteryState = state;
+          });
+        });
   }
 
   Future<void> _getBatteryInfo() async {
-    batteryLevel = await Battery().batteryLevel;
+    _batteryLevel = await Battery().batteryLevel;
   }
 
   @override
@@ -51,7 +59,9 @@ class _ListPageState extends State<ListPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             //バッテリーの状態を表示
-            Text('$batteryLevel%'),
+            Text('$_batteryLevel%'),
+            //バッテリーの状態を表示
+            Text('$_batteryState'),
           ]
         ),
       ),
