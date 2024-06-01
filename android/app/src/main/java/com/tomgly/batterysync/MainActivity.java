@@ -1,4 +1,4 @@
-package com.tomgly.batterysync.batterysync;
+package com.tomgly.batterysync;
 
 import io.flutter.embedding.android.FlutterActivity;
 
