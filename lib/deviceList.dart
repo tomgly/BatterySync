@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'settings.dart';
 
 class ListPage extends StatefulWidget {
 
@@ -57,7 +58,12 @@ class _ListPageState extends State<ListPage> {
         //設定ページ移行
         actions: <Widget>[
           IconButton(
-            onPressed: () {
+            onPressed: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return SettingsPage();
+                }),
+              );
             },
             icon: const Icon(Icons.settings, color: Colors.black),
           )
