@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:battery_plus/battery_plus.dart';
+import 'package:flutter/services.dart';
 
 class ListPage extends StatefulWidget {
 
@@ -9,33 +9,43 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  int _batteryLevel = 0;
-  //バッテリーの状態をStateとして保持
-  BatteryState? _batteryState;
-  //StreamSubscriptionで監視する
-  StreamSubscription<BatteryState>? _batteryStateSubscription;
+  // メソッドチャンネルを作成
+  static const batteryChannel = MethodChannel('platform_method/battery');
+  // バッテリーの残量
+  String batteryLevel = 'Waiting...';
 
   @override
   void initState() {
     super.initState();
     Timer.periodic(
-      const Duration(seconds: 10),
-      (Timer timer) {
-        setState(() {
-          _getBatteryInfo();
-        });
-      }
-    );
-    _batteryStateSubscription =
-        Battery().onBatteryStateChanged.listen((BatteryState state) {
+        const Duration(seconds: 10),
+            (Timer timer) {
           setState(() {
-            _batteryState = state;
+            getBatteryInfo();
           });
-        });
+        }
+    );
   }
 
-  Future<void> _getBatteryInfo() async {
-    _batteryLevel = await Battery().batteryLevel;
+  Future<void> getBatteryInfo() async {
+    String devName = "Not...";
+    int level = 0;
+
+    try {
+      final res =
+      await batteryChannel.invokeMethod('getBatteryInfo');
+
+      // プラットフォームからの結果を解析取得
+      devName = res["device"];
+      level = res["level"];
+    } on PlatformException catch (e) {
+      batteryLevel = "Failed to get battery level: '${e.message}'.";
+    }
+
+    // 画面を再描画する
+    setState(() {
+      batteryLevel = level.toString();
+    });
   }
 
   @override
@@ -59,15 +69,13 @@ class _ListPageState extends State<ListPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             //バッテリーの状態を表示
-            Text('$_batteryLevel%'),
-            //バッテリーの状態を表示
-            Text('$_batteryState'),
+            Text('$batteryLevel%'),
           ]
         ),
       ),
       //デバイス追加ボタン
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
         },
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
