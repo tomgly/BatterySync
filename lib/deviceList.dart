@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'settings.dart';
 
 class ListPage extends StatefulWidget {
@@ -14,17 +16,20 @@ class _ListPageState extends State<ListPage> {
   static const batteryChannel = MethodChannel('platform_method/battery');
   // バッテリーの残量
   String batteryLevel = 'Waiting...';
+  // テーマカラー
+  final Color themeColor = Colors.teal;
 
   @override
   void initState() {
     super.initState();
+    getBatteryInfo();
     Timer.periodic(
-        const Duration(seconds: 10),
-            (Timer timer) {
-          setState(() {
-            getBatteryInfo();
-          });
-        }
+      const Duration(seconds: 10),
+          (Timer timer) {
+        setState(() {
+          getBatteryInfo();
+        });
+      }
     );
   }
 
@@ -54,7 +59,7 @@ class _ListPageState extends State<ListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('BatterySync', style: TextStyle(color: Colors.black, fontSize: 25)),
-        backgroundColor: Colors.teal,
+        backgroundColor: themeColor,
         //設定ページ移行
         actions: <Widget>[
           IconButton(
@@ -69,15 +74,50 @@ class _ListPageState extends State<ListPage> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(64),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            //バッテリーの状態を表示
-            Text('$batteryLevel%'),
-          ]
-        ),
+      body: RefreshIndicator(
+        color: Colors.black,
+        backgroundColor: themeColor,
+        onRefresh: () async {
+        },
+        child: SingleChildScrollView(
+          child: Column(children: <Widget> [
+            Container(
+              height: 200,
+              padding: const EdgeInsets.all(15),
+              child: ListTile(
+                title: Text('$batteryLevel%', style: const TextStyle(color: Colors.black)),
+                tileColor: themeColor,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  side: BorderSide(color: Colors.black),
+                ),
+                onTap: () async {
+                },
+              ),
+            ),
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 10,
+              padding: const EdgeInsets.all(15),
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: ListTile(
+                    title: Text('$batteryLevel%', style: const TextStyle(color: Colors.black)),
+                    tileColor: themeColor,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      side: BorderSide(color: Colors.black),
+                    ),
+                    onTap: () async {
+                    }
+                  )
+                );
+              }
+            )
+          ])
+        )
       ),
       //デバイス追加ボタン
       floatingActionButton: FloatingActionButton(
@@ -87,7 +127,7 @@ class _ListPageState extends State<ListPage> {
           borderRadius: BorderRadius.all(Radius.circular(10)),
           side: BorderSide(color: Colors.black),
         ),
-        //backgroundColor: ,
+        backgroundColor: themeColor,
         child: const Icon(Icons.add, color: Colors.black),
       ),
     );
