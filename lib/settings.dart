@@ -4,6 +4,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -49,6 +50,12 @@ class UserPreferences {
     _prefs = await SharedPreferences.getInstance(),
     _packageInfo = await PackageInfo.fromPlatform(),
   );
+
+  static bool getFirstLaunch() =>
+    _prefs.getBool('first_launch') ?? true;
+
+  static Future<void> setFirstLaunch() async =>
+    await _prefs.setBool('first_launch', false);
 
   static String getVersion() =>
     _packageInfo.version;

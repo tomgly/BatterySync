@@ -6,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'settings.dart';
 
 class ListPage extends StatefulWidget {
+  const ListPage({super.key});
 
   @override
   _ListPageState createState() => _ListPageState();
@@ -66,7 +67,7 @@ class _ListPageState extends State<ListPage> {
             onPressed: () async {
               await Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) {
-                  return SettingsPage();
+                  return const SettingsPage();
                 }),
               );
             },
