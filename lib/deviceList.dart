@@ -90,7 +90,7 @@ class _ListPageState extends State<ListPage> {
             Container(
               height: 200,
               margin: const EdgeInsets.all(15),
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
               decoration: BoxDecoration(
                 color: themeColor,
                 border: Border.all(color: Colors.black),
@@ -101,7 +101,7 @@ class _ListPageState extends State<ListPage> {
                   Text(thisDevice[1], style: const TextStyle(color: Colors.black)),
                   const Text('このデバイス', style: TextStyle(color: Colors.black))
                 ]),
-                const SizedBox(width: 15),
+                const SizedBox(width: 10),
                 Column(children: [
                   /*
                   SizedBox(
