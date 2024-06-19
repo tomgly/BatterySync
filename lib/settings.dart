@@ -51,11 +51,8 @@ class UserPreferences {
     _packageInfo = await PackageInfo.fromPlatform(),
   );
 
-  static bool getFirstLaunch() =>
-    _prefs.getBool('first_launch') ?? true;
-
-  static Future<void> setFirstLaunch() async =>
-    await _prefs.setBool('first_launch', false);
+  static List<String> getDeviceInfo() =>
+      _prefs.getStringList('deviceInfo') ?? ['unknown', 'unknown', 'unknown'];
 
   static String getVersion() =>
     _packageInfo.version;

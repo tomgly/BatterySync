@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_overboard/flutter_overboard.dart';
 import 'deviceList.dart';
 import 'settings.dart';
@@ -12,23 +13,19 @@ class IntroductionPage extends StatefulWidget {
 
 class _IntroductionPageState extends State<IntroductionPage> {
 
-  _afterIntroduction() {
-    UserPreferences.setFirstLaunch();
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) {
-        return const ListPage();
-      }),
+  _afterIntroduction() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('first_launch', false);
+    Navigator.pushAndRemoveUntil( context,
+        MaterialPageRoute(builder: (context) => const ListPage()), (_) => false
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('チュートリアル', style: TextStyle(color: Colors.black, fontSize: 25)),
-        backgroundColor: Colors.teal,
-      ),
       body: SafeArea(
+        top: false,
         child: OverBoard(
           pages: pages,
           showBullets: true,
