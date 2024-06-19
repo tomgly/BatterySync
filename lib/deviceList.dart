@@ -17,7 +17,7 @@ class _ListPageState extends State<ListPage> {
   // アップデート間隔(秒)
   int updateSeconds= 10;
   // バッテリーの残量
-  String batteryLevel = 'Waiting...';
+  int batteryLevel = 0;
   // テーマカラー
   final Color themeColor = Colors.teal;
   // このデバイス情報
@@ -50,12 +50,12 @@ class _ListPageState extends State<ListPage> {
       devName = res["device"];
       level = res["level"];
     } on PlatformException catch (e) {
-      batteryLevel = "Failed to get battery level: '${e.message}'.";
+      batteryLevel = -1;
     }
 
     // 画面を再描画する
     setState(() {
-      batteryLevel = level.toString();
+      batteryLevel = level;
     });
   }
 
@@ -101,16 +101,15 @@ class _ListPageState extends State<ListPage> {
                   Text(thisDevice[1], style: const TextStyle(color: Colors.black)),
                   const Text('このデバイス', style: TextStyle(color: Colors.black))
                 ]),
-                const SizedBox(width: 10),
+                const SizedBox(width: 30),
                 Column(children: [
-                  /*
-                  SizedBox(
-                    width: 50,
+                  Container(
+                    width:50,
                     height: 50,
-                    child: pieChart(),
+                    margin: const EdgeInsets.all(20),
+                    child: pieChart(batteryLevel.toDouble(), 20),
                   ),
-                   */
-                  Text('現在のバッテリーは$batteryLevel%です', style: const TextStyle(color: Colors.black)),
+                  Text('$batteryLevel%', style: const TextStyle(color: Colors.black)),
                 ])
               ]),
             ),
@@ -152,41 +151,34 @@ class _ListPageState extends State<ListPage> {
     );
   }
 
-  Widget pieChart() {
-    List<Sector> sectors = [
-      Sector(color: Colors.green, value: double.parse(batteryLevel), title: ''),
-      Sector(color: Colors.white, value: 100 - double.parse(batteryLevel), title: ''),
-    ];
-
-    List<PieChartSectionData> chartSections(List<Sector> sectors) {
-      final List<PieChartSectionData> list = [];
-      for (var sector in sectors) {
-        const double radius = 50.0;
-        final data = PieChartSectionData(
-          color: sector.color,
-          value: sector.value,
-          title: sector.title,
-          radius: radius,
-        );
-        list.add(data);
-      }
-      return list;
+  Color color(int level) {
+    if (level > 20) {
+      return Colors.green;
+    } else {
+      return Colors.red;
     }
+  }
 
-    return PieChart(
+  PieChart pieChart(double level, double radius) =>
+    PieChart(
       PieChartData(
-        sections: chartSections(sectors),
         startDegreeOffset: 270,
-        centerSpaceRadius: 70.0,
+        sectionsSpace: 0,
+        centerSpaceRadius: radius % 40,
+        sections: [
+          PieChartSectionData(
+              color: color(level.toInt()),
+              value: level,
+              title: '',
+              radius: radius
+          ),
+          PieChartSectionData(
+              color: Colors.white,
+              value: 100 - level,
+              title: '',
+              radius: radius
+          ),
+        ],
       ),
     );
-  }
-}
-
-class Sector {
-  final Color color;
-  final double value;
-  final String title;
-
-  Sector({required this.color, required this.value, required this.title});
 }
